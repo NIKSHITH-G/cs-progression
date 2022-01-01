@@ -4,31 +4,24 @@ import simpleGit from "simple-git";
 
 const path = "./data.json";
 
-const makeCommit = (n) => {
-  if (n === 0) return simpleGit().push();
+const date = moment("2022-01-02").format();
+const data = { date };
 
-  const date = moment()
-    .subtract(1, "y")
-    .add(n, "d")
-    .format();
+jsonfile.writeFile(path, data, { spaces: 2 }, async (err) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
 
-  const data = { date };
+  console.log("JSON written successfully");
 
-  return new Promise((resolve, reject) => {
-    jsonfile.writeFile(path, data, { spaces: 2 }, async (err) => {
-      if (err) return reject(err);
-
-      try {
-        const git = simpleGit();
-        await git.add(["-A"]);   // ← changed from "./*"
-        await git.commit(date, { "--date": date });
-        console.log(`Commit ${n} done: ${date}`);
-        resolve(await makeCommit(n - 1));
-      } catch (error) {
-        reject(error);
-      }
-    });
-  });
-};
-
-makeCommit(365);
+  try {
+    const git = simpleGit();
+    await git.add(["-A"]);
+    await git.commit(date, { "--date": date });
+    await git.push();
+    console.log("Committed to Jan 2nd 2022!");
+  } catch (error) {
+    console.error(error);
+  }
+});
