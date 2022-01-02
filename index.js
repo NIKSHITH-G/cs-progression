@@ -4,7 +4,7 @@ import simpleGit from "simple-git";
 
 const path = "./data.json";
 
-const date = moment("2022-01-02").format();
+const date = moment.utc("2022-01-02").format();
 const data = { date };
 
 jsonfile.writeFile(path, data, { spaces: 2 }, async (err) => {
