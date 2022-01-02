@@ -7,6 +7,8 @@ const path = "./data.json";
 const date = moment.utc("2022-01-02").format();
 const data = { date };
 
+process.env.GIT_COMMITTER_DATE = date;
+
 jsonfile.writeFile(path, data, { spaces: 2 }, async (err) => {
   if (err) {
     console.error(err);
